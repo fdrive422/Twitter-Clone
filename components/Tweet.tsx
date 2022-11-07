@@ -8,6 +8,7 @@ import {
 	ArrowUpTrayIcon,
 } from "@heroicons/react/24/outline";
 import { fetchComments } from "../utils/fetchComments";
+import { useSession } from "next-auth/react";
 
 interface Props {
 	tweet: Tweet;
@@ -15,6 +16,9 @@ interface Props {
 
 function Tweet({ tweet }: Props) {
 	const [comments, setComments] = useState<Comment[]>([]);
+	const [commentBoxVisible, setCommentBoxVisible] = useState<boolean>(false);
+	const [input, setInput] = useState<string>("");
+	const { data: session } = useSession();
 
 	const refreshComments = async () => {
 		const comments: Comment[] = await fetchComments(tweet._id);
@@ -24,6 +28,10 @@ function Tweet({ tweet }: Props) {
 	useEffect(() => {
 		refreshComments();
 	}, []);
+
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+	};
 
 	return (
 		<div className="flex flex-col space-x-3 border-y p-5 border-gray-100">
@@ -63,7 +71,11 @@ function Tweet({ tweet }: Props) {
 			</div>
 
 			<div className="flex justify-between mt-5">
-				<div className="flex cursor-pointer items-center space-x-3 text-gray-400">
+				<div
+					onClick={() =>
+						session && setCommentBoxVisible(!commentBoxVisible)
+					}
+					className="flex cursor-pointer items-center space-x-3 text-gray-400">
 					<ChatBubbleLeftRightIcon className="h-5 w-5" />
 					<p>{comments.length}</p>
 				</div>
@@ -80,6 +92,24 @@ function Tweet({ tweet }: Props) {
 					<ArrowUpTrayIcon className="h-5 w-5" />
 				</div>
 			</div>
+
+			{commentBoxVisible && (
+				<form onSubmit={handleSubmit} className="mt-3 flex space-x-3">
+					<input
+						value={input}
+						onChange={(e) => setInput(e.target.value)}
+						className="flex-1 rounded-lg bg-gray-100 p-2 outline-none"
+						type="text"
+						placeholder="write a comment..."
+					/>
+					<button
+						disabled={!input}
+						type="submit"
+						className="text-twitter disabled:text-gray-200">
+						Post
+					</button>
+				</form>
+			)}
 
 			{comments?.length > 0 && (
 				<div className="my-2 mt-5 max-h-44 space-y-5 overflow-y-scroll border-t border-gray-100 p-5">
