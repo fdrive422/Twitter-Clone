@@ -31,7 +31,7 @@ function TweetBox({ setTweets }: Props) {
 	const [imageUrlBoxIsOpen, setImageUrlBoxIsOpen] = useState<boolean>(false);
 
 	const addImageToTweet = (
-		e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+		e: React.MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
 	) => {
 		e.preventDefault();
 
@@ -46,7 +46,7 @@ function TweetBox({ setTweets }: Props) {
 		const tweetInfo: TweetBody = {
 			text: input,
 			username: session?.user?.name || "Unknown User",
-			profileImg: session?.user?.name || "https//link.papareact.com/gll",
+			profileImg: session?.user?.image || "https//link.papareact.com/gll",
 			image: image,
 		};
 
