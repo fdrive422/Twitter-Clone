@@ -1,3 +1,4 @@
+import { profile } from "console";
 export interface Tweet extends TweetBody {
 	_id: string
 	_createdAt: string

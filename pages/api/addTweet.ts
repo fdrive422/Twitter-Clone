@@ -39,5 +39,5 @@ export default async function handler(
 	})
 	const json = await result.json();
 
-	res.status(200).json({ message: 'Added!' })
+	res.status(200).json({ message: 'Tweet Added!' })
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Comment, Tweet } from "../typings";
+import { Comment, CommentBody, Tweet } from "../typings";
 import TimeAgo from "react-timeago";
 import {
 	ChatBubbleLeftRightIcon,
@@ -7,8 +7,9 @@ import {
 	ArrowsRightLeftIcon,
 	ArrowUpTrayIcon,
 } from "@heroicons/react/24/outline";
-import { fetchComments } from "../utils/fetchComments";
 import { useSession } from "next-auth/react";
+import { fetchComments } from "../utils/fetchComments";
+import toast from "react-hot-toast";
 
 interface Props {
 	tweet: Tweet;
@@ -29,16 +30,43 @@ function Tweet({ tweet }: Props) {
 		refreshComments();
 	}, []);
 
-	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+
+		const commentToast = toast.loading("Posting Comment...");
+
+		// Comment logic
+		const comment: CommentBody = {
+			comment: input,
+			tweetId: tweet._id,
+			username: session?.user?.name || "Unknown User",
+			profileImg:
+				session?.user?.image || "https://links.papareact.com/gll",
+		};
+
+		const result = await fetch(`/api/addComment`, {
+			body: JSON.stringify(comment),
+			method: "POST",
+		});
+
+		console.log("WOOHOO we made it", result);
+		toast.success("Comment Posted!", {
+			id: commentToast,
+		});
+
+		setInput("");
+		setCommentBoxVisible(false);
+		refreshComments();
 	};
 
 	return (
-		<div className="flex flex-col space-x-3 border-y p-5 border-gray-100">
+		<div
+			key={tweet._id}
+			className="flex flex-col space-x-3 border-y p-5 border-gray-100">
 			<div className="flex space-x-3">
 				<img
 					className="h-10 w-10 rounded-full object-cover"
-					src={tweet.profileImg}
+					src={tweet.profileImg || "https://links.papareact.com/gll"}
 					alt=""
 				/>
 
@@ -58,7 +86,7 @@ function Tweet({ tweet }: Props) {
 							date={tweet._createdAt}
 						/>
 					</div>
-					<p>{tweet.text}</p>
+					<p className="pt-1">{tweet.text}</p>
 
 					{tweet.image && (
 						<img
@@ -138,7 +166,7 @@ function Tweet({ tweet }: Props) {
 
 									<TimeAgo
 										className="text-sm text-gray-500"
-										date={tweet._createdAt}
+										date={comment._createdAt}
 									/>
 								</div>
 								<p>{comment.comment}</p>

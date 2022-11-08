@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { CommentBody } from '../../typings'
 
 type Data = {
-	comment: string
+	message: string
 }
 
 export default async function handler(
@@ -44,5 +44,5 @@ export default async function handler(
 	})
 	const json = await result.json();
 
-	res.status(200).json({ comment: 'Added!' })
+	res.status(200).json({ message: 'Comment Posted!' })
 }

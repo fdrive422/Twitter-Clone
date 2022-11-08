@@ -70,9 +70,7 @@ function TweetBox({ setTweets }: Props) {
 		e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
 	) => {
 		e.preventDefault();
-
 		postTweet();
-
 		setInput("");
 		setImage("");
 		setImageUrlBoxIsOpen(false);
