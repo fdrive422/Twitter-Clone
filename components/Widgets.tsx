@@ -13,11 +13,13 @@ function Widgets() {
 					className="flex-1 bg-transparent outline-none"
 				/>
 			</div>
-			<TwitterTimelineEmbed
-				sourceType="profile"
-				screenName="fdrive"
-				options={{ height: 1000 }}
-			/>
+			<div className="mt-2">
+				<TwitterTimelineEmbed
+					sourceType="profile"
+					screenName="fdrive"
+					options={{ height: 1000 }}
+				/>
+			</div>
 		</div>
 	);
 }

@@ -90,7 +90,7 @@ function TweetBox({ setTweets }: Props) {
 						onChange={(e) => setInput(e.target.value)}
 						type="text"
 						placeholder="what's happening?"
-						className="h-20 w-full text-xl outline-none placeholder:text-xl"
+						className="h-20 w-full text-xl bg-transparent outline-none placeholder:text-xl"
 					/>
 					<div className="flex items-center">
 						<div className="flex flex-1 space-x-2 text-twitter ">
@@ -108,7 +108,7 @@ function TweetBox({ setTweets }: Props) {
 						<button
 							onClick={handleSubmit}
 							disabled={!input || !session}
-							className="bg-twitter px-5 py-2 text-white font-bold rounded-full disabled:opacity-40">
+							className="bg-twitter mt-2 px-5 py-2 text-white font-bold rounded-full disabled:opacity-40">
 							Tweet
 						</button>
 					</div>
