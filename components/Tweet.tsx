@@ -16,10 +16,12 @@ interface Props {
 }
 
 function Tweet({ tweet }: Props) {
+	const { data: session } = useSession();
+
 	const [comments, setComments] = useState<Comment[]>([]);
 	const [commentBoxVisible, setCommentBoxVisible] = useState<boolean>(false);
 	const [input, setInput] = useState<string>("");
-	const { data: session } = useSession();
+	const [userLoggedIn, setUserLoggedIn] = useState<boolean>(true);
 
 	const refreshComments = async () => {
 		const comments: Comment[] = await fetchComments(tweet._id);
@@ -35,7 +37,7 @@ function Tweet({ tweet }: Props) {
 
 		const commentToast = toast.loading("Posting Reply...");
 
-		// Comment logic
+		// reply to tweet logic
 		const comment: CommentBody = {
 			comment: input,
 			tweetId: tweet._id,
@@ -101,11 +103,13 @@ function Tweet({ tweet }: Props) {
 			<div className="flex justify-between mt-5">
 				<div
 					onClick={() =>
-						session && setCommentBoxVisible(!commentBoxVisible)
+						session
+							? setCommentBoxVisible(!commentBoxVisible)
+							: setUserLoggedIn(false)
 					}
 					className="flex cursor-pointer items-center space-x-3 text-gray-400">
 					<ChatBubbleLeftRightIcon className="h-5 w-5" />
-					<p>{comments.length}</p>
+					<p>{comments?.length > 0 ? comments.length : ""}</p>
 				</div>
 
 				<div className="flex cursor-pointer items-center space-x-3 text-gray-400">
@@ -121,6 +125,11 @@ function Tweet({ tweet }: Props) {
 				</div>
 			</div>
 
+			{!userLoggedIn && (
+				<p className="mt-2 pl2 text-rose-600">
+					You must sign in first...
+				</p>
+			)}
 			{commentBoxVisible && (
 				<form onSubmit={handleSubmit} className="mt-3 flex space-x-3">
 					<input
@@ -131,7 +140,7 @@ function Tweet({ tweet }: Props) {
 						placeholder="write a reply..."
 					/>
 					<button
-						disabled={!input}
+						disabled={!input || input.trim().length === 0}
 						type="submit"
 						className="text-twitter disabled:text-gray-200">
 						Post
