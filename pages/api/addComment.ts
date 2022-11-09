@@ -14,7 +14,7 @@ export default async function handler(
 	const comment: CommentBody = JSON.parse(req.body)
 
 	const mutations = {
-		mutation: [
+		mutations: [
 			{
 				create: {
 					_type: 'comment',

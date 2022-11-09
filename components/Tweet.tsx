@@ -33,7 +33,7 @@ function Tweet({ tweet }: Props) {
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		const commentToast = toast.loading("Posting Comment...");
+		const commentToast = toast.loading("Posting Reply...");
 
 		// Comment logic
 		const comment: CommentBody = {
@@ -50,7 +50,7 @@ function Tweet({ tweet }: Props) {
 		});
 
 		console.log("WOOHOO we made it", result);
-		toast.success("Comment Posted!", {
+		toast.success("Reply Posted!", {
 			id: commentToast,
 		});
 
@@ -67,7 +67,7 @@ function Tweet({ tweet }: Props) {
 				<img
 					className="h-10 w-10 rounded-full object-cover"
 					src={tweet.profileImg || "https://links.papareact.com/gll"}
-					alt=""
+					alt={tweet.username}
 				/>
 
 				<div>
@@ -91,7 +91,7 @@ function Tweet({ tweet }: Props) {
 					{tweet.image && (
 						<img
 							src={tweet.image}
-							alt=""
+							alt={tweet.text}
 							className="m-5 ml-0 mb-1 max-h-60 rounded-lg object-cover shadow-sm"
 						/>
 					)}
@@ -128,7 +128,7 @@ function Tweet({ tweet }: Props) {
 						onChange={(e) => setInput(e.target.value)}
 						className="flex-1 rounded-lg bg-gray-100 p-2 outline-none"
 						type="text"
-						placeholder="write a comment..."
+						placeholder="write a reply..."
 					/>
 					<button
 						disabled={!input}
@@ -149,7 +149,7 @@ function Tweet({ tweet }: Props) {
 							<img
 								src={comment.profileImg}
 								className="mt-2 h-7 w-7 object-cover rounded-full"
-								alt=""
+								alt={comment.username}
 							/>
 							<div>
 								<div className="flex items-center space-x-1">
